@@ -5,8 +5,8 @@ module.exports = [
     stage: 1,
     dependency: true,
     body: [
-      { name: 'name', element: 'input', type: 'text' },
-      { name: 'email', element: 'input', type: 'email' },
+      { name: 'Nome', element: 'input', type: 'text', required: 'true' },
+      { name: 'Email', element: 'input', type: 'email', required: 'true' },
       {
         name: 'Nos conheceu por onde ?',
         element: 'input',

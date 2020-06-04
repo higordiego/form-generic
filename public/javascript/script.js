@@ -5,11 +5,15 @@ const makeElemets = (data) => data.reduce((acc, el) => {
 }, '')
 const getTemplate = (data) => `
 <div class="container">
-    <form style="margin-top: 50px">\n
-        ${makeElemets(data)}
-    <button type="submit" class="btn btn-primary" click()>Salvar</button>
-<div>
-</form>`
+  <div class="card" style="margin-top: 50px">
+    <div class="card-body">
+        <form>\n
+            ${makeElemets(data)}
+        <button type="submit" class="btn btn-primary" click()>Salvar</button>
+      </form>
+    </div>
+  </div>
+</div>`
 
 /**
  * @param  {number} campaign
@@ -21,10 +25,13 @@ const formGenerate = async ({ url, campaign, stage }) => {
     if (!campaign || typeof campaign !== 'number') throw new Error('Parâmetro campanha inválido!')
     if (!stage || typeof stage !== 'number') throw new Error('Parâmetro etapa inválido!')
     const response = await searchFormApi(url, campaign, stage)
-    const template = getTemplate(response.body)
-    window.document.getElementById('form_generate').innerHTML = template
+
+    if (response.body) {
+      const template = getTemplate(response.body)
+      window.document.getElementById('form_generate').innerHTML = template
+    } else window.document.getElementById('form_generate').innerHTML = '<h1> Erro de comunicação tente, novamente mais tarde!</h1>'
   } catch (error) {
-    console.log('error', error)
+    window.document.getElementById('form_generate').innerHTML = '<h1> Erro de comunicação tente, novamente mais tarde!</h1>'
   }
 }
 
@@ -68,27 +75,27 @@ const comboPopulate = (data, map) => {
 const generateFormBaseElement = (element) => {
   const input = () => `<div class="form-group">
                                 <label for="exampleInputEmail1">${element.name}</label>
-                                <input type="${element.type}" class="form-control" id="${element.name}" aria-describedby="emailHelp" placeholder="${element.name}">
+                                <input type="${element.type}" class="form-control" id="${element.name}" aria-describedby="emailHelp" placeholder="${element.name}" ${element.required ? 'required' : ''}>
                                 <small class="form-text text-muted"></small>
                             </div>`
 
   const number = () => `<div class="form-group">
                                 <label for="exampleInputEmail1">${element.name}</label>
-                                <input type="${element.type}" class="form-control" id="${element.name}" aria-describedby="emailHelp" placeholder="${element.name}" min="${element.min || 0}" max="${element.max || 0}" >
-                                <small class="form-text text-muted"></small>
-                            </div>`
+                                <input type="${element.type}" class="form-control" id="${element.name}" aria-describedby="emailHelp" placeholder="${element.name}" min="${element.min || 0}" max="${element.max || 0}" ${element.required ? 'required' : ''}>
+      <small class="form-text text-muted"></small>
+                            </div > `
 
-  const textarea = () => `<div class="form-group">
-                                <label for="exampleFormControlTextarea1">${element.name}</label>
-                                <textarea class="form-control" id="${element.name}" rows="3"></textarea>
-                            </div>`
+  const textarea = () => `<div class="form-group" >
+  <label for="exampleFormControlTextarea1">${element.name}</label>
+  <textarea class="form-control" id="${element.name}" rows="3" ${element.required ? 'required' : ''}></textarea>
+                            </div > `
 
-  const select = () => `<div class="form-group">
-                                <label for="exampleFormControlSelect1">${element.name}</label>
-                                <select class="form-control" id="${element.name}">
-                                ${comboPopulate(element.source, { value: 'id', name: 'name' })}
-                                </select>
-                           </div>`
+  const select = () => `<div class="form-group" >
+            <label for="exampleFormControlSelect1">${element.name}</label>
+              <select class="form-control" id="${element.name}" ${element.required ? 'required' : ''}>
+                ${comboPopulate(element.source, { value: 'id', name: 'name' })}
+              </select>
+</div > `
 
   const types = {
     text: input,
