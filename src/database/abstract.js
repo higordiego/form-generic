@@ -36,7 +36,7 @@ exports.findOne = async (collection, query, options = {}) => {
   let conn = null
   try {
     conn = await clientConnect(url)
-    const result = await conn.db().collection(collection).findOne(query, { fields: options })
+    const result = await conn.db().collection(collection).findOne(query, options)
     conn.close()
     return result
   } catch (err) {
@@ -59,7 +59,7 @@ exports.findOneAndUpdate = async (collection, query, data, options = {}) => {
     conn = await clientConnect(url)
     const result = await conn.db().collection(collection).findOneAndUpdate(query, data, options)
     conn.close()
-    return result
+    return result.value
   } catch (err) {
     if (conn !== null) conn.close()
     throw new Error(`Error in search db: ${err}`)

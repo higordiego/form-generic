@@ -1,3 +1,4 @@
+require('dotenv').config()
 const http = require('http')
 const path = require('path')
 const express = require('express')
@@ -16,15 +17,6 @@ app.use(morgan('combined'))
 app.use(compression())
 app.use(helmet())
 app.disable('x-powered-by')
-
-const config = require('./config/campaign')
-
-app.get('/form', (req, res) => {
-  const { campaign, stage } = req.query
-
-  const result = config.find(val => val.campaign === parseInt(campaign) && val.stage === parseInt(stage))
-  res.status(200).json(result)
-})
 
 const port = process.env.PORT || 3000
 const server = http.createServer(app)
