@@ -52,7 +52,7 @@ const getTemplate = (data) => `
         <form id=${initObject.campaign}>\n
             ${makeElemets(data)}
           <div class="d-flex flex-row-reverse">
-            <button type="button" class="btn btn-primary" onClick="formSubmit()">Salvar</button>
+            <input type="submit" class="btn btn-primary" ></input>
           </div>
       </form>
     </div>
@@ -70,19 +70,32 @@ const getFormsValue = (keysForm) => {
     return acc
   }, {})
 }
+
+/**
+ * @function
+ * @param  {any} data
+ * @return {void}
+ */
+const persistenceLocalStorageSave = (data) => window.localStorage.setItem('clin-campaign', JSON.stringify(data))
+
+
+const persistenceLocalStorageGet = () => JSON.parse(window.localStorage.getItem('clin-campaign'))
+
 /**
  * @function
  * @param {null}
  * @return {void}
  */
-const formSubmit = async () => {
+const formSubmit = async (e) => {
   try {
+    e.preventDefault()
     const obj = getFormsValue(initObject.keysForms)
     obj.campaign = initObject.campaign
     obj.stage = initObject.stage
     const response = await requestApi(`${initObject.url}/api/form`, 'POST', obj)
 
     document.getElementById(initObject.campaign).reset()
+    persistenceLocalStorageSave({ ...response, ...obj })
     if (response && response.message) window.alert(response.message)
     if (response && response.redirect) window.location.href = response.redirect
   } catch (error) {
@@ -117,7 +130,7 @@ const getKeyForms = (body) => body.map(val => val.name.toLowerCase())
  * @return {any}
  */
 const validateDependency = (campaign) => {
-  const applicationStorage = window.localStorage.getItem('campaign')
+  const applicationStorage = persistenceLocalStorageGet()
 
   if (!campaign.dependency) return null
   if (!applicationStorage) window.location.href = 'https://planoclin.com.br'
@@ -127,8 +140,8 @@ const validateDependency = (campaign) => {
     applicationStorage.stage &&
     applicationStorage.campaign
   ) {
-    if (applicationStorage.stage === campaign.stage) return null
-    if (campaign === applicationStorage.campaign) return null
+    if (applicationStorage.stage !== campaign.stage) return null
+    if (campaign.campaign !== applicationStorage.campaign) return null
 
     const loader = bodyLoader(campaign)
 
@@ -138,6 +151,17 @@ const validateDependency = (campaign) => {
 
     window.location.href = 'https://planoclin.com.br'
   }
+}
+
+/**
+ * @function
+ * @param {null}
+ * @return {void}
+ */
+function watchFormSubmit () {
+  const element = window.document.querySelector('form')
+
+  element.addEventListener('submit', formSubmit, false)
 }
 
 /**
@@ -159,12 +183,13 @@ const formGenerate = async ({ url, campaign, stage }) => {
 
     if (response.body) {
       initObject.keysForms = getKeyForms(response.body)
-      // loader
-      validateDependency(campaign)
+      validateDependency(response)
       const template = getTemplate(response.body)
       window.document.getElementById('form_generate').innerHTML = template
+      if (template) watchFormSubmit()
     } else window.document.getElementById('form_generate').innerHTML = '<h1> Erro de comunicação tente, novamente mais tarde!</h1>'
   } catch (error) {
+    console.log('error', error)
     window.document.getElementById('form_generate').innerHTML = '<h1> Erro de comunicação tente, novamente mais tarde!</h1>'
   }
 }
@@ -206,7 +231,7 @@ const comboPopulate = (data, map) => {
   return data.reduce((acc, el) => {
     acc += `<option value="${el[map.value]}">${el[map.name]}</option>`
     return acc
-  }, '')
+  }, '<option value="">Selecione uma Opção</option>')
 }
 
 /**
