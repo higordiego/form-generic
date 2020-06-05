@@ -1,5 +1,21 @@
 # Poc - Formulário genérico
 
+# Install dependencies
+
+- Dependencies Application: ` yarn install `
+
+# Machine Local
+### Technologies needed
+- Nodejs 12.18.0 or superior
+- MongoDB 3.6 or superior
+
+### Start Application
+`yarn start`
+
+### Access
+- Api: *http://localhost:3000*
+
+
 # CDN
 
 Para utilização do formulário genérico precisa-se que coloque o script abaixo do body.
