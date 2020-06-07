@@ -181,7 +181,7 @@ Resultado esperado na montagem do front-end
 
 **Cadastro de campanha**
 ```curl
-curl --location --request GET 'http://localhost:3000/api/campaign' \
+curl --location --request POST 'http://localhost:3000/api/campaign' \
 --header 'Content-Type: application/json' \
 --data-raw '{
   "campaign": "7f75795c-a724-11ea-bb37-0242ac130002",
