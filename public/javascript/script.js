@@ -167,7 +167,7 @@ function watchFormSubmit() {
 
 /**
  * @function
- * @description Não quiserem fazer da forma correta, por isso fiz essa gambiarra.
+ * @description Não quiseram fazer da forma correta, por isso fiz essa gambiarra.
  * @param  {Array} body
  * @return {void}
  */
