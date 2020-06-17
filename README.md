@@ -183,8 +183,8 @@ Resultado esperado na montagem do front-end
 ```curl
 curl --location --request POST 'http://localhost:3000/api/campaign' \
 --header 'Content-Type: application/json' \
---data-raw '{
-  "campaign": "7f75795c-a724-11ea-bb37-0242ac130002",
+--data-raw ' {
+  "campaign": "7f75795c-a724-11ea-bb37-0242ac150002",
   "stage": 1,
   "dependency": false,
   "body": [
@@ -192,13 +192,20 @@ curl --location --request POST 'http://localhost:3000/api/campaign' \
       "name": "Nome",
       "element": "input",
       "type": "text",
-      "required": true
+      "required": true,
+      "class": "form-control",
+      "pattern": "[A-Za-z]{3}",
+      "error": "message de error no input",
+      "placeholder": "Digita o o nome rapaz"
     },
     {
       "name": "Email",
       "element": "input",
       "type": "email",
-      "required": true
+      "required": true,
+      "class": "form-control",
+      "error": "message de error no input",
+      "placeholder": "Digita o email mano"
     },
     {
       "name": "Nos conheceu por onde ?",
@@ -222,6 +229,8 @@ curl --location --request POST 'http://localhost:3000/api/campaign' \
     }
   ],
   "redirect": "http://localhost:300/index2.html",
-  "message": "Bem vindo a clin vc irá para outro formulário.... - (esse texto vem do backend)"
+  "button": "Enviando...",
+  "success": "Bem vindo a clin vc irá para outro formulário.... - (esse texto vem do backend)",
+  "error": "Estamos passando por instabilidade, por favor tente novamente!"
 }'
 ```
