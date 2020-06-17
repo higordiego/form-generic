@@ -45,14 +45,14 @@ const validateLocalStorage = (object, ...body) => returnObject => {
  * @param  {any} data
  * @return {string}
  */
-const getTemplate = (data) => `
+const getTemplate = (data, button) => `
 <div class="container">
   <div class="card" style="margin-top: 50px">
     <div class="card-body">
         <form id=${initObject.campaign}>\n
             ${makeElemets(data)}
           <div class="d-flex flex-row-reverse">
-            <input type="submit" class="btn btn-primary" ></input>
+            <input type="submit" class="btn btn-primary" value="${button || 'enviar'}" ></input>
           </div>
       </form>
     </div>
@@ -158,10 +158,29 @@ const validateDependency = (campaign) => {
  * @param {null}
  * @return {void}
  */
-function watchFormSubmit () {
+function watchFormSubmit() {
   const element = window.document.querySelector('form')
 
   element.addEventListener('submit', formSubmit, false)
+
+}
+
+/**
+ * @function
+ * @description não quis fazer isso, como não deixaram fazer o projeto original tive que fazer essa gambiarra.
+ * @param  {Array} body
+ * @return {void}
+ */
+const watchErrorCustom = (body) => {
+  const elements = window.document.getElementsByTagName('input')
+  for (const iterator of elements) {
+    const idName = iterator.getAttribute('#form')
+    if (idName) {
+      const elementBody = body.find(val => val.name.toLowerCase() === idName.toLocaleLowerCase())
+
+      if (elementBody) iterator.setCustomValidity(elementBody.error)
+    }
+  }
 }
 
 /**
@@ -184,12 +203,17 @@ const formGenerate = async ({ url, campaign, stage }) => {
     if (response.body) {
       initObject.keysForms = getKeyForms(response.body)
       validateDependency(response)
-      const template = getTemplate(response.body)
+      const template = getTemplate(response.body, response.button)
+
+
       window.document.getElementById('form_generate').innerHTML = template
-      if (template) watchFormSubmit()
+      if (template) {
+        watchFormSubmit()
+        // gambiarra linda para custom error no javascript
+        watchErrorCustom(response.body)
+      }
     } else window.document.getElementById('form_generate').innerHTML = '<h1> Erro de comunicação tente, novamente mais tarde!</h1>'
   } catch (error) {
-    console.log('error', error)
     window.document.getElementById('form_generate').innerHTML = '<h1> Erro de comunicação tente, novamente mais tarde!</h1>'
   }
 }
@@ -243,24 +267,22 @@ const comboPopulate = (data, map) => {
 const generateFormBaseElement = (element) => {
   const input = () => `<div class="form-group" >
                                 <label for="exampleInputEmail1">${element.name}</label>
-                                <input type="${element.type}" class="form-control" id="${element.name.toLowerCase()}" aria-describedby="emailHelp" placeholder="${element.name}" ${element.required ? 'required' : ''}>
-                                <small class="form-text text-muted"></small>
+                                <input type="${element.type}"  #form='${element.name.toLowerCase()}' class="${element.class || 'form-control'}"  pattern='${element.pattern || ''}' placeholder="${element.placeholder}" ${element.required ? 'required' : ''}>
                             </div>`
 
   const number = () => `<div class="form-group">
                                 <label for="exampleInputEmail1">${element.name}</label>
-                                <input type="${element.type}" class="form-control" id="${element.name.toLowerCase()}" aria-describedby="emailHelp" placeholder="${element.name}" min="${element.min || 0}" max="${element.max || 0}" ${element.required ? 'required' : ''}>
-      <small class="form-text text-muted"></small>
-                            </div > `
+                                <input type="${element.type}" #form-${element.name.toLowerCase()} class="${element.class || 'form-control'}" pattern='${element.pattern || ''}'  placeholder="${element.placeholder}" min="${element.min || 0}" max="${element.max || 0}" ${element.required ? 'required' : ''}>
+                            </div>`
 
   const textarea = () => `<div class="form-group" >
-  <label for="exampleFormControlTextarea1">${element.name}</label>
-  <textarea class="form-control" id="${element.name.toLowerCase()}" rows="3" ${element.required ? 'required' : ''}></textarea>
+                              <label for="exampleFormControlTextarea1">${element.name}</label>
+                              <textarea class="${element.class || 'form-control'}" id="${element.name.toLowerCase()}" placeholder="${element.placeholder}" rows="3" ${element.required ? 'required' : ''}></textarea>
                             </div > `
 
   const select = () => `<div class="form-group" >
             <label for="exampleFormControlSelect1">${element.name}</label>
-              <select class="form-control" id="${element.name.toLowerCase()}" ${element.required ? 'required' : ''}>
+              <select class="${element.class || 'form-control'}" id="${element.name.toLowerCase()}" ${element.required ? 'required' : ''}>
                 ${comboPopulate(element.source, { value: 'id', name: 'name' })}
               </select>
 </div > `
