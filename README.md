@@ -73,7 +73,7 @@ Para cadastrar a campanha basta informar os seguintes dados.
  
 ```json
 {
-  "campaign": "7f75795c-a724-11ea-bb37-0242ac130002",
+  "campaign": "7f75795c-a724-11ea-bb37-0242ac150002",
   "stage": 1,
   "dependency": false,
   "body": [
@@ -81,13 +81,20 @@ Para cadastrar a campanha basta informar os seguintes dados.
       "name": "Nome",
       "element": "input",
       "type": "text",
-      "required": true
+      "required": true,
+      "class": "form-control",
+      "pattern": "[A-Za-z]{3}",
+      "error": "message de error no input",
+      "placeholder": "Digita o o nome rapaz"
     },
     {
       "name": "Email",
       "element": "input",
       "type": "email",
-      "required": true
+      "required": true,
+      "class": "form-control",
+      "error": "message de error no input",
+      "placeholder": "Digita o email mano"
     },
     {
       "name": "Nos conheceu por onde ?",
@@ -110,8 +117,10 @@ Para cadastrar a campanha basta informar os seguintes dados.
       ]
     }
   ],
-  "redirect": "https://14b1cc272ed5.ngrok.io/index2.html",
-  "message": "Bem vindo a clin vc irá para outro formulário.... - (esse texto vem do backend)"
+  "redirect": "http://localhost:300/index2.html",
+  "button": "Enviando...",
+  "success": "Bem vindo a clin vc irá para outro formulário.... - (esse texto vem do backend)",
+  "error": "Estamos passando por instabilidade, por favor tente novamente!"
 }
 ```
 
