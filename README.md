@@ -133,53 +133,46 @@ Resultado esperado na montagem do front-end
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Teste de formulário</title>
-    <link type="text/css" rel="stylesheet"
-        href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <link type="text/css" rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
 </head>
 
 <body cz-shortcut-listen="true">
-
-    <div id="form_generate">
-        <div class="container">
-            <div class="card" style="margin-top: 50px">
-                <div class="card-body">
-                    <form id="7f75795c-a724-11ea-bb37-0242ac130002">
-
-                        <div class="form-group">
-                            <label for="exampleInputEmail1">Nome</label>
-                            <input type="text" class="form-control" id="nome" aria-describedby="emailHelp"
-                                placeholder="Nome" required="">
-                            <small class="form-text text-muted"></small>
-                        </div>
-                        <div class="form-group">
-                            <label for="exampleInputEmail1">Email</label>
-                            <input type="email" class="form-control" id="email" aria-describedby="emailHelp"
-                                placeholder="Email" required="">
-                            <small class="form-text text-muted"></small>
-                        </div>
-                        <div class="form-group">
-                            <label for="exampleFormControlSelect1">Nos conheceu por onde ?</label>
-                            <select class="form-control" id="nos conheceu por onde ?">
-                                <option value="">Selecione uma Opção</option>
-                                <option value="1">Facebook</option>
-                                <option value="2">Google</option>
-                                <option value="3">Qualquer outra coisa</option>
-                            </select>
-                        </div>
-
-                        <div class="d-flex flex-row-reverse">
-                            <input type="submit" class="btn btn-primary">
-                        </div>
-                    </form>
-                </div>
+  <div id="form_generate">
+    <div class="container">
+        <div class="card" style="margin-top: 50px">
+            <div class="card-body">
+                <form id="7f75795c-a724-11ea-bb37-0242ac150002">
+                    <div class="form-group">
+                        <label for="exampleInputEmail1">Nome</label>
+                        <input type="text" #form="nome" class="form-control" pattern="[A-Za-z]{3}"
+                            placeholder="Digita o o nome rapaz" required="">
+                    </div>
+                    <div class="form-group">
+                        <label for="exampleInputEmail1">Email</label>
+                        <input type="email" #form="email" class="form-control" pattern="B"
+                            placeholder="Digita o email mano" required="">
+                    </div>
+                    <div class="form-group">
+                        <label for="exampleFormControlSelect1">Nos conheceu por onde ?</label>
+                        <select class="form-control" id="nos conheceu por onde ?">
+                            <option value="">Selecione uma Opção</option>
+                            <option value="1">Facebook</option>
+                            <option value="2">Google</option>
+                            <option value="3">Qualquer outra coisa</option>
+                        </select>
+                    </div>
+                    <div class="d-flex flex-row-reverse">
+                        <input type="submit" class="btn btn-primary" value="Enviando...">
+                    </div>
+                </form>
             </div>
         </div>
     </div>
-    <script src="/javascript/script.js"></script>
+  </div>
+    <script src="https://libformgeneric.s3.amazonaws.com/clin.min.js"> </script>
     <script>
-        formGenerate({ campaign: "7f75795c-a724-11ea-bb37-0242ac130002", stage: 1, url: 'https://14b1cc272ed5.ngrok.io' })
+        formGenerate({ campaign: "7f75795c-a724-11ea-bb37-0242ac130002", stage: 1, url: 'http://localhost:3000' })
     </script>
-
 
 </body>
 
